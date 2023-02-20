@@ -10,21 +10,31 @@ def create_db():
     # create cursor
     cursor = connection.cursor()
 
-    cursor.execute("""
-    CREATE TABLE category(
-            id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            name VARCHAR(100) UNIQUE NOT NULL
-    ) 
-    """)
+    try:
+        cursor.execute("""
+        CREATE TABLE category(
+                id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                name VARCHAR(100) UNIQUE NOT NULL
+        ) 
+        """)
+    except sqlite3.OperationalError:
+        print("The table 'category' already exist.")
+    else:
+        print("Table 'category' created successfully.")
 
-    cursor.execute("""
-    CREATE TABLE dish(
-            id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            name VARCHAR(100) UNIQUE NOT NULL, 
-            category_id INTEGER NOT NULL, 
-            FOREIGN KEY(category_id) REFERENCES category(id)
-    ) 
-    """)
+    try:
+        cursor.execute("""
+        CREATE TABLE dish(
+                id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                name VARCHAR(100) UNIQUE NOT NULL, 
+                category_id INTEGER NOT NULL, 
+                FOREIGN KEY(category_id) REFERENCES category(id)
+        ) 
+        """)
+    except sqlite3.OperationalError:
+        print("The table 'dish' already exist.")
+    else:
+        print("Table 'dish' created successfully.")
 
     # close the connection
     connection.close()
