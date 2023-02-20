@@ -39,4 +39,37 @@ def create_db():
     # close the connection
     connection.close()
 
+# add category
+def add_category():
+    category = input("Name of the new category\n>")
+
+    connection = sqlite3.connect("restaurant.db")
+    cursor = connection.cursor()
+
+    try:
+        # insert the new category
+        cursor.execute(f"INSERT INTO category VALUES(null, '{category}') ")
+    except sqlite3.IntegrityError:
+        print(f"Error: The category '{category}' already exist.")
+    else:
+        print(f"Category '{category}' created successfully.")
+
+    # save and close
+    connection.commit()
+    connection.close()
+
+# create db
 create_db()
+
+# show menu
+while True:
+    print("\nWelcome to the restaurant manager")
+    option = input("\nInsert a option:\n[1] Add a category\n[2] Exit\n>")
+
+    if option == "1":
+        add_category()
+    elif option == "2":
+        print("Bye!")
+        break
+    else:
+        print("Error: select a valid option")
